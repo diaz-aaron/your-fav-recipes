@@ -1,44 +1,89 @@
-const initialState = {
-    allRecipes: [],
-    favoriteRecipes: [],
-    searchTerm: ''
-  };
+// Import combineReducers from redux here.
+import { createStore, combineReducers } from 'redux';
+import allRecipesData from './data.js';
 
-// Dispatched when the user types in the search input.
-// Sends the search term to the store.
+// Action Creators
+////////////////////////////////////////
+
+const addRecipe = (recipe) => {
+  return { 
+    type: 'favoriteRecipes/addRecipe', 
+    payload: recipe 
+  };
+}
+
+const removeRecipe = (recipe) => {
+  return { 
+    type: 'favoriteRecipes/removeRecipe', 
+    payload: recipe 
+  };
+}
+
 const setSearchTerm = (term) => {
-    return { 
-      type: 'searchTerm/setSearchTerm', 
-      payload: term 
-    };
+  return {
+    type: 'searchTerm/setSearchTerm',
+    payload: term
   }
-  
-  // Dispatched when the user presses the clear search button.
-  const clearSearchTerm = () => {
-    return { 
-      type: 'searchTerm/clearSearchTerm' 
-    };
+}
+
+const clearSearchTerm = () => {
+  return {
+    type: 'searchTerm/clearSearchTerm'
+  }; 
+}
+
+const loadData = () => {
+  return { 
+    type: 'allRecipes/loadData', 
+    payload: allRecipeData
+  };
+}
+
+// Reducers
+////////////////////////////////////////
+
+const initialAllRecipes = [];
+const allRecipesReducer = (allRecipes = initialAllRecipes, action) => {
+  switch(action.type) {
+    case 'allRecipes/loadData': 
+      return action.payload
+    default:
+      return allRecipes;
   }
-  
-  // Dispatched when the user first opens the application.
-  // Sends the allRecipesData array to the store.
-  const loadData = () => ({
-    type: 'allRecipes/loadData',
-    payload: allRecipesData
-  });
-  
-  // Dispatched when the user clicks on the heart icon of 
-  // a recipe in the "All Recipes" section.
-  // Sends the recipe object to the store.
-  const addRecipe = (recipe) => ({
-    type: 'favoriteRecipes/addRecipe',
-    payload: recipe
-  })
-  
-  // Dispatched when the user clicks on the broken heart 
-  // icon of a recipe in the "Favorite Recipes" section.
-  // Sends the recipe object to the store.
-  const removeRecipe = (recipe) => ({
-    type: 'favoriteRecipes/removeRecipe',
-    payload: recipe
-  })
+}
+
+const initialSearchTerm = '';
+const searchTermReducer = (searchTerm = initialSearchTerm, action) => {
+  switch(action.type) {
+    case 'searchTerm/setSearchTerm':
+      return action.payload
+    case 'searchTerm/clearSearchTerm':
+      return ''
+    default: 
+      return searchTerm;
+  }
+}
+
+const initialFavoriteRecipes = [];
+const favoriteRecipesReducer = (favoriteRecipes = initialFavoriteRecipes, action) => {
+  switch(action.type) {
+    case 'favoriteRecipes/addRecipe':
+      return [...favoriteRecipes, action.payload]
+    case 'favoriteRecipes/removeRecipe':
+      return favoriteRecipes.filter(recipe => {
+        return recipe.id !== action.payload.id
+      });
+    default:
+      return favoriteRecipes;
+  }
+}
+
+// Create your `rootReducer` here using combineReducers().
+const reducers = {
+  allRecipes: allRecipesReducer,
+  searchTerm: searchTermReducer,
+  favoriteRecipes: favoriteRecipesReducer
+}
+
+const rootReducer = combineReducers(reducers);
+const store = createStore(rootReducer);
