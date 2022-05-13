@@ -1,9 +1,9 @@
-import allRecipesData from '../../../data.js';
+import allRecipesData from "../../data";
 
 export const loadData = () => {
   return { 
     type: 'allRecipes/loadData', 
-    payload: allRecipeData
+    payload: allRecipesData
   };
 }
 
