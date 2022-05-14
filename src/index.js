@@ -4,17 +4,12 @@ import './index.css';
 import { App } from './app/App.js';
 // Import 'store' here.
 import { store } from './app/store';
+import { Provider } from 'react-redux';
 
-const render = () => {
-  // Pass `state` and `dispatch` props to <App />
-  ReactDOM.render(
-    <App 
-      state={store.getState()}
-      dispatch={store.dispatch}
-    />,
-    document.getElementById('root')
-  )
-}
-render();
-// Subscribe render to changes to the `store`
-const unsubscribe = store.subscribe(render);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);

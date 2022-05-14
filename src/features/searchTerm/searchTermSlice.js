@@ -22,3 +22,5 @@ export const setSearchTerm = (term) => {
         return searchTerm;
     }
   }
+
+  export const selectSearchTerm = (state) => state.searchTerm;
